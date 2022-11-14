@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const api_config = require("../config/api.js");
 
+
 const AuthController = {
 
     /* create new user */
@@ -18,6 +19,7 @@ const AuthController = {
         try {
             const user = await newUser.save();
             res.status(201).render("products");
+            
         } catch (err) {
             res.status(500).json({
                 type: "error",
@@ -47,7 +49,7 @@ const AuthController = {
             );
 
             const { password, ...data } = user._doc;
-
+     
             res.status(200).cookie("token",token,{httpOnly:true})
             .render("products");
         }

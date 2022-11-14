@@ -20,10 +20,16 @@
         alt="product image"
       />
     </div>
+    
     <div class="col-md-5 mt-2 mb-2 ml-2 mr-auto text-dark">
+      <a href="/shop/shopping-cart">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7h-16.813l2.938 7h11.898zm4.969-10l-3.432 12h-12.597l.839 2h13.239l3.474-12h1.929l.743-2h-4.195z"/></svg>
+      <span class="badge badge-pill badge-info">0</span>
+      
+    </a>
       <h2><%=product.title%></h2>
       <hr />
-      <p class="price">Rupee ₹<%=product.price%></p>
+      <p class="price">Dollar $<%=product.price%></p>
       <p class="lead"> Description: 
         <p><%=product.description%></p>
       </p>
@@ -31,7 +37,7 @@
       <p><strong>Size:</strong> <%=product.size%></p>
       <p><strong>Color:</strong> <%=product.color%></p>
       <p class="is-available text-center">In stock</p>
-      <a href="/carts/add/" class="btn btn-block btn-secondary mt-3 mb-3 button-style">
+      <a href="/add-to-cart/:id" class="btn btn-block btn-secondary mt-3 mb-3 button-style">
         Add to Shopping Cart
       </a>
     </div>

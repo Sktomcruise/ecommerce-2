@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const session=require("express-session");
+var MongoStore = require('connect-mongo');
 
 const { auth_route, user_route, product_route, cart_route, order_route } = require('./routes');
 
@@ -14,6 +16,7 @@ app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "public")));
 
+
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 app.use(cookieParser());
@@ -24,6 +27,16 @@ app.use('/users', user_route);
 app.use('/products', product_route);
 app.use('/carts', cart_route);
 app.use('/orders', order_route);
+app.use(
+    session({
+      secret:"my secret",
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({mongoUrl:'mongodb://127.0.0.1:27017/myproject'}),
+      //session expires after 3 hours
+      cookie: { maxAge: 60 * 1000 * 60 * 3 },
+    })
+  );
 
 const dbConfig = require('./config/database-config-examples');
 
