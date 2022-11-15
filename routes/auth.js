@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require("express-session")
 const router = express.Router();
 
 const { AuthController } = require('../controllers');
@@ -8,7 +9,9 @@ router.get("/",(req,res)=>{
 });
 
 router.get("/login",(req,res)=>{
-    res.render("signin")
+    req.login_user=session().save;
+    res.render("signin");
+   
 });
 
 router.get("/register",(req,res)=>{

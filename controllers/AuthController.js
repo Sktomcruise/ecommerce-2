@@ -11,6 +11,7 @@ const AuthController = {
     async create_user(req, res, next) {
 
         const newUser = new User({
+            user_id:req.body.user_id,
             username: req.body.username,
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 10)
@@ -49,6 +50,7 @@ const AuthController = {
             );
 
             const { password, ...data } = user._doc;
+        
      
             res.status(200).cookie("token",token,{httpOnly:true})
             .render("products");

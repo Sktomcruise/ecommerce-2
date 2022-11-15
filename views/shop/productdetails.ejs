@@ -37,7 +37,7 @@
       <p><strong>Size:</strong> <%=product.size%></p>
       <p><strong>Color:</strong> <%=product.color%></p>
       <p class="is-available text-center">In stock</p>
-      <a href="/add-to-cart/:id" class="btn btn-block btn-secondary mt-3 mb-3 button-style">
+      <a href="/carts/add-to-cart/<%=product._id%>" class="btn btn-block btn-secondary mt-3 mb-3 button-style" method>
         Add to Shopping Cart
       </a>
     </div>

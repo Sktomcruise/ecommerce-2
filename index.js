@@ -29,12 +29,14 @@ app.use('/carts', cart_route);
 app.use('/orders', order_route);
 app.use(
     session({
-      secret:"my secret",
+      secret: "keyboard cat",
       resave: false,
-      saveUninitialized: false,
-      store: MongoStore.create({mongoUrl:'mongodb://127.0.0.1:27017/myproject'}),
+      saveUninitialized: true,
+      store: MongoStore.create({
+        mongoUrl: "mongodb://127.0.0.1:27017/ecommercesite",
+      }),
       //session expires after 3 hours
-      cookie: { maxAge: 60 * 1000 * 60 * 3 },
+      cookie: { maxAge: 60 * 1000*  60 * 3 },
     })
   );
 

@@ -6,7 +6,7 @@ const { authenticationVerifier, accessLevelVerifier, isAdminVerifier } = require
 
 router.get('/', isAdminVerifier, CartController.get_carts);
 router.get('/:userId', accessLevelVerifier, CartController.get_cart);
-router.post('/add', authenticationVerifier, CartController.create_cart);
+router.post('/add/:id', authenticationVerifier, CartController.create_cart);
 router.put('/:id', accessLevelVerifier, CartController.update_cart);
 router.delete('/:id', accessLevelVerifier, CartController.delete_cart);
 
