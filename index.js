@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const session=require("express-session");
 var MongoStore = require('connect-mongo');
 
-const { auth_route, user_route, product_route, cart_route, order_route } = require('./routes');
+const { auth_route, user_route, product_route, cart_route, order_route,payment_route } = require('./routes');
 
 const app = express();
 
@@ -27,8 +27,10 @@ app.use('/users', user_route);
 app.use('/products', product_route);
 app.use('/carts', cart_route);
 app.use('/orders', order_route);
+app.use('/pay',payment_route)
 app.use(
     session({
+      key:"userid",
       secret: "keyboard cat",
       resave: false,
       saveUninitialized: true,

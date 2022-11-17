@@ -17,31 +17,23 @@
   </header>
     <div class="container">
     <div class="row mt-4 mb-4">
-    <div class="col-md-5 mt-2 mr-2 ml-auto">
-      <img
-        src="<%=product.image%>"
-        class="img-fluid product-img"
-        alt="product image"
-      />
-    </div>
     <div class="col-md-5 mt-2 mb-2 ml-2 mr-auto text-dark">
-      <form action="/carts/add-to-cart/<%=product._id%>" method="POST">
-      <p style="text-transform: uppercase;"><strong><%=product.title%></strong></p>
+      <form action="https://buy.stripe.com/test_aEUdTb4duaCt9YAbII">
+      <p style="text-transform: uppercase;"><strong><%=cart.title%></strong></p>
+
       <hr />
-      <p class="price">Rupee ₹<%=product.price%></p>
-      <p class="lead"> Description: 
-        <p><%=product.description%></p>
-      </p>
-      <p><strong>Category:</strong> <%=product.categories%></p>
-      <p><strong>Size:</strong> <%=product.size%></p>
-      <p><strong>Color:</strong> <%=product.color%></p>
-      <p class="is-available">In stock</p>
-      <label>Qty:
-        <input type="number" name="qty">
-      </label>
+      <div class="col-md-5 mt-2 mr-2 ml-auto">
+        <img
+          src="<%=cart.image%>"
+          class="img-fluid product-img"
+          alt="product image"
+        />
+      </div>
+      <p class="price">Rupee ₹<%=cart.price%></p>
+    <p class="qty">qunatity<%cart.quantity%></p>
       <button class="btn btn-block btn-secondary mt-3 mb-3 button-style">
-        Add to Shopping Cart
-      </button>>
+        Order
+      </button>
     </form>
     </div>
     </div>

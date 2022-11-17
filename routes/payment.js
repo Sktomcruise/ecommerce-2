@@ -4,6 +4,11 @@ const router = express.Router();
 const { accessLevelVerifier } = require('../middlewares/verifyToken');
 const { PaymentController } = require('../controllers');
 
-router.post('/payment', accessLevelVerifier, PaymentController.create_);
+router.get('/payment',(req,res)=>{
+    res.render("shop/checkout")
+
+})
+
+
 
 module.exports = router;
