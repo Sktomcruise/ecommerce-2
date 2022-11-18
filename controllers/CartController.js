@@ -128,43 +128,85 @@ const CartController = {
     // },
 
     // / update product /
-    async update_cart(req, res) {
-        try {
-            const updatedCart = await Cart.findByIdAndUpdate(req.params.id, {
-                $set: req.body
-            },
-                { new: true }
-            );
-            res.status(200).json({
-                type: "success",
-                message: "Cart updated successfully",
-                updatedCart
-            })
-        } catch (err) {
-            res.status(500).json({
-                type: "error",
-                message: "Something went wrong please try again",
-                err
-            })
-        }
-    },
-
-    // / delete cart /
-    async delete_cart(req, res) {
-        try {
-            await Cart.findOneAndDelete(req.params.id);
-            res.status(200).json({
-                type: "success",
-                message: "Product has been deleted successfully"
-            });
-        } catch (err) {
-            res.status(500).json({
-                type: "error",
-                message: "Something went wrong please try again",
-                err
-            })
-        }
+    // GET: reduce one from an item in the shopping cart
+async update_cart (req, res, next) {
+  // if a user is logged in, reduce from the user's cart and save
+  // else reduce from the session's cart
+  const productId = req.params.id;
+  let cart;
+  try {
+    if (req.user) {
+      cart = await Cart.findOne({ user: req.user._id });
+    } else if (req.session.cart) {
+      cart = await new Cart(req.session.cart);
     }
-};
+
+    // find the item with productId
+    let itemIndex = cart.items.findIndex((p) => p.productId == productId);
+    if (itemIndex > -1) {
+      // find the product to find its price
+      const product = await Product.findById(productId);
+      // if product is found, reduce its qty
+      cart.items[itemIndex].qty--;
+      cart.items[itemIndex].price -= product.price;
+      cart.totalQty--;
+      cart.totalCost -= product.price;
+      // if the item's qty reaches 0, remove it from the cart
+      if (cart.items[itemIndex].qty <= 0) {
+        await cart.items.remove({ _id: cart.items[itemIndex]._id });
+      }
+      req.session.cart = cart;
+      //save the cart it only if user is logged in
+      if (req.user) {
+        await cart.save();
+      }
+      //delete cart if qty is 0
+      if (cart.totalQty <= 0) {
+        req.session.cart = null;
+        await Cart.findByIdAndRemove(cart._id);
+      }
+    }
+    res.redirect(req.headers.referer);
+  } catch (err) {
+    console.log(err.message);
+    res.redirect("/");
+  }
+},
+
+// GET: remove all instances of a single product from the cart
+ async delete_cart (req, res, next) {
+  const productId = req.params.id;
+  let cart;
+  try {
+    if (req.user) {
+      cart = await Cart.findOne({ user: req.user._id });
+    } else if (req.session.cart) {
+      cart = await new Cart(req.session.cart);
+    }
+    //fnd the item with productId
+    let itemIndex = cart.items.findIndex((p) => p.productId == productId);
+    if (itemIndex > -1) {
+      //find the product to find its price
+      cart.totalQty -= cart.items[itemIndex].qty;
+      cart.totalCost -= cart.items[itemIndex].price;
+      await cart.items.remove({ _id: cart.items[itemIndex]._id });
+    }
+    req.session.cart = cart;
+    //save the cart it only if user is logged in
+    if (req.user) {
+      await cart.save();
+    }
+    //delete cart if qty is 0
+    if (cart.totalQty <= 0) {
+      req.session.cart = null;
+      await Cart.findByIdAndRemove(cart._id);
+    }
+    res.redirect(req.headers.referer);
+  } catch (err) {
+    console.log(err.message);
+    res.redirect("/");
+  }
+},
+}
 
 module.exports = CartController;

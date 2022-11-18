@@ -20,7 +20,7 @@ const authenticationVerifier = (req, res, next)=> {
 /* check if the current user */
 const accessLevelVerifier = (req, res, next) => {
     authenticationVerifier(req,res, ()=>{
-        if(req.user.id === req.params.id || req.user.isAdmin) {
+        if(req.user.id === req.body.id || req.user.isAdmin) {
             next()
         } else {
             res.status(403).json("You are not allowed to perform this task");

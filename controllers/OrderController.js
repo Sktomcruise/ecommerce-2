@@ -1,5 +1,5 @@
 const Order = require('../models/Order');
-
+const User = require('../models/User');
 const OrderController = {
 
     /* get all orders (only admin) */
@@ -85,14 +85,11 @@ const OrderController = {
 
     /* add order */
     async create_order(req, res) {
+        const user = await User.findById(req.params.id);
         const newOrder = new Order(req.body);
         try {
             const savedOrder = await newOrder.save();
-            res.status(201).json({
-                type: "success",
-                message: "Order created successfully",
-                savedOrder
-            })
+            res.status(201).render("shop/checkout")
         } catch (err) {
             res.status(500).json({
                 type: "error",

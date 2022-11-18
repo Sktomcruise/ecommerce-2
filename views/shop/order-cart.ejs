@@ -18,7 +18,7 @@
     <div class="container">
     <div class="row mt-4 mb-4">
     <div class="col-md-5 mt-2 mb-2 ml-2 mr-auto text-dark">
-      <form action="https://buy.stripe.com/test_aEUdTb4duaCt9YAbII">
+      <form action="/orders/" method="post">
       <p style="text-transform: uppercase;"><strong><%=cart.title%></strong></p>
 
       <hr />
@@ -28,9 +28,23 @@
           class="img-fluid product-img"
           alt="product image"
         />
+        <p style="text-transform: uppercase;">productID:  <strong><%=cart.id%></strong></p>
+        
+
       </div>
-      <p class="price">Rupee ₹<%=cart.price%></p>
-    <p class="qty">qunatity<%cart.quantity%></p>
+
+    <label>Qty:
+      <input type="number" name="qty">
+    
+    </label>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="name" class="form-control" name="username" id="name" placeholder="Enter Username" required />
+      <label for="address">Address</label>
+      <input type="address" class="form-control" address="address" id="address" placeholder="Enter address here" required />
+      
+    </div>
+    
       <button class="btn btn-block btn-secondary mt-3 mb-3 button-style">
         Order
       </button>
