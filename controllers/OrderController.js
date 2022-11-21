@@ -1,5 +1,9 @@
 const Order = require('../models/Order');
+const Cart = require('../models/Cart');
+const Product = require('../models/Product');
 const User = require('../models/User');
+
+
 const OrderController = {
 
     /* get all orders (only admin) */
@@ -85,10 +89,33 @@ const OrderController = {
 
     /* add order */
     async create_order(req, res) {
-        const user = await User.findById(req.params.id);
-        const newOrder = new Order(req.body);
+        // const productId = req.body.cartid;
+        let product = await Product.find({});
+       
+        
+
+        const newOrder = new Order({
+            // const user = await User.findById(req.body.id);
+           
+            username : req.body.username,
+            // address:req.body.address,
+         
+          
+            products: [
+              { 
+                //   productId: req.body.productid,
+                  quantity: req.body.qty,
+                  price:req.body.price,
+                 
+                
+              },
+             
+          ],
+            // address:req.body.address,
+          });
         try {
-            const savedOrder = await newOrder.save();
+
+            const savedOrder =  newOrder.save({savedOrder:newOrder});
             res.status(201).render("shop/checkout")
         } catch (err) {
             res.status(500).json({
@@ -109,7 +136,7 @@ const OrderController = {
             );
             res.status(200).json({
                 type: "success",
-                message: "Cart updated successfully",
+                message: "order updated successfully",
                 updatedOrder
             })
         } catch (err) {

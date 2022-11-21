@@ -6,7 +6,7 @@ const { authenticationVerifier, accessLevelVerifier, isAdminVerifier } = require
 
 
 router.get('/add-to-cart/:id',(req,res)=>{
-    res.render("ordercart")
+    res.render("ordercart",{productId:productId})
 
 });
 

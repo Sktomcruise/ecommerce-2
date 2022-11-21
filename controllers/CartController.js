@@ -86,7 +86,7 @@ const CartController = {
             }
             cart = await cart.save();
             // return res.status(201).send(cart);
-            return res.render("order-cart")
+            return res.render("shop/order-cart")
 
           } else {
             //no cart for user, create new cart
