@@ -2,11 +2,11 @@ const { cookie } = require('express-validator');
 const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
-    userId: {
-        type:String,
-        required:true
+    // userId: {
+    //     type:String,
+    //     required:true
        
-      },
+    //   },
       username:{
         type:String
 
@@ -19,11 +19,11 @@ const OrderSchema = new mongoose.Schema({
             },
             quantity: {
                 type: Number,
-                default: 1
+               
             },
-            // price:{
-            //     type:Number,
-            // },
+            price:{
+                type:Number,
+            },
         }
     ],
    

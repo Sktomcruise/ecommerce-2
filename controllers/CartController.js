@@ -68,7 +68,7 @@ const CartController = {
         // const user = await User.findById(req.session.userId)
       
         try {
-          let cart = await Cart.findOne({ userId: req.user._id });
+          let cart = await Cart.findOne({ userId: req.cookies.userId });
           
       
           if (cart) {

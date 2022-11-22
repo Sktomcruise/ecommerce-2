@@ -90,7 +90,7 @@ const OrderController = {
     /* add order */
     async create_order(req, res) {
         // const productId = req.body.cartid;
-        let product = await Product.find({});
+        // let productId = await Product.findById({productId:productId});
        
         
 
