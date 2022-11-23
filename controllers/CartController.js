@@ -1,9 +1,9 @@
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
-const User = require('../models/User');
+const User = require('../models/User')
 const CartController = {
 
-    // / get all carts (only admin) /
+    /* get all carts (only admin) */
     async get_carts(req, res) {
         try {
             const carts = await Cart.find();
@@ -20,20 +20,17 @@ const CartController = {
         }
     },
 
-    // / get user cart /
+    /* get user cart */
     async get_cart(req, res) {
         try {
-            const cart = await Cart.findOne({ userId: req.params.userId});
+            const cart = await Cart.find({ userId: req.session.user});
             if (!cart) {
                 res.status(404).json({
                     type: "error",
                     message: "User doesn't exists"
                 })
             } else {
-                res.status(200).json({
-                    type: "success",
-                    cart
-                })
+                res.status(200).render("cart",{cart: cart})
             }
         } catch (err) {
             res.status(500).json({
@@ -44,7 +41,7 @@ const CartController = {
         }
     },
 
-    // / add product to cart /
+    /* add product to cart */
     // async create_cart(req, res) {
     //     const newCart = new Cart(req.body);
     //     try {
@@ -65,15 +62,16 @@ const CartController = {
 
     async create_cart (req, res) {
         const productId = req.params.id;
+        let user = await User.findOne({ userId: req.user._id });
+
         // const user = await User.findById(req.session.userId)
       
         try {
-          let cart = await Cart.findOne({ userId: req.cookies.userId });
-          
+          let cart = await Cart.findOne({ userId: req.user._id });
       
           if (cart) {
             //cart exists for user
-            let itemIndex = cart.products.findIndex(p => p.productId == productId);
+            let itemIndex = cart.products.findById(p => p.productId == productId);
       
             if (itemIndex > -1) {
               //product exists in the cart, update the quantity
@@ -82,29 +80,25 @@ const CartController = {
               cart.products[itemIndex] = productItem;
             } else {
               //product does not exists in cart, add new item
-              cart.products.push({ productId, quantity });
+              cart.products.push({ productId, quantity,price,title });
             }
             cart = await cart.save();
-            // return res.status(201).send(cart);
-            return res.render("shop/order-cart")
-
+            return res.status(201).send(cart);
           } else {
+            const product = await Product.findById(productId);
             //no cart for user, create new cart
-            let product = await Product.findById(req.params.id);
-            let cart = await Cart.create({
-              userId : req.cookies.userid,
+            const newCart = await Cart.create({
+              userId : req.session.user,
               products: [
                 { 
                     productId: productId,
                     quantity: req.body.qty,
-                    price:product.price,
-                  
+                    price: product.price,
+                    title: product.title
                 }
-               
             ]
             });
-            // newCart = await cart.save();
-            return res.status(201).render("shop/order-cart",{cart:product});
+            return res.status(201).redirect("/products")                   //render("order",{cart: product});            
           }
         } catch (err) {
           console.log(err);
@@ -127,86 +121,44 @@ const CartController = {
     //     })
     // },
 
-    // / update product /
-    // GET: reduce one from an item in the shopping cart
-async update_cart (req, res, next) {
-  // if a user is logged in, reduce from the user's cart and save
-  // else reduce from the session's cart
-  const productId = req.params.id;
-  let cart;
-  try {
-    if (req.user) {
-      cart = await Cart.findOne({ user: req.user._id });
-    } else if (req.session.cart) {
-      cart = await new Cart(req.session.cart);
-    }
+    /* update product */
+    async update_cart(req, res) {
+        try {
+            const updatedCart = await Cart.findByIdAndUpdate(req.params.id, {
+                $set: req.body
+            },
+                { new: true }
+            );
+            res.status(200).json({
+                type: "success",
+                message: "Cart updated successfully",
+                updatedCart
+            })
+        } catch (err) {
+            res.status(500).json({
+                type: "error",
+                message: "Something went wrong please try again",
+                err
+            })
+        }
+    },
 
-    // find the item with productId
-    let itemIndex = cart.items.findIndex((p) => p.productId == productId);
-    if (itemIndex > -1) {
-      // find the product to find its price
-      const product = await Product.findById(productId);
-      // if product is found, reduce its qty
-      cart.items[itemIndex].qty--;
-      cart.items[itemIndex].price -= product.price;
-      cart.totalQty--;
-      cart.totalCost -= product.price;
-      // if the item's qty reaches 0, remove it from the cart
-      if (cart.items[itemIndex].qty <= 0) {
-        await cart.items.remove({ _id: cart.items[itemIndex]._id });
-      }
-      req.session.cart = cart;
-      //save the cart it only if user is logged in
-      if (req.user) {
-        await cart.save();
-      }
-      //delete cart if qty is 0
-      if (cart.totalQty <= 0) {
-        req.session.cart = null;
-        await Cart.findByIdAndRemove(cart._id);
-      }
+    /* delete cart */
+    async delete_cart(req, res) {
+        try {
+            await Cart.findOneAndDelete(req.params.id);
+            res.status(200).json({
+                type: "success",
+                message: "Product has been deleted successfully"
+            });
+        } catch (err) {
+            res.status(500).json({
+                type: "error",
+                message: "Something went wrong please try again",
+                err
+            })
+        }
     }
-    res.redirect(req.headers.referer);
-  } catch (err) {
-    console.log(err.message);
-    res.redirect("/");
-  }
-},
-
-// GET: remove all instances of a single product from the cart
- async delete_cart (req, res, next) {
-  const productId = req.params.id;
-  let cart;
-  try {
-    if (req.user) {
-      cart = await Cart.findOne({ user: req.user._id });
-    } else if (req.session.cart) {
-      cart = await new Cart(req.session.cart);
-    }
-    //fnd the item with productId
-    let itemIndex = cart.items.findIndex((p) => p.productId == productId);
-    if (itemIndex > -1) {
-      //find the product to find its price
-      cart.totalQty -= cart.items[itemIndex].qty;
-      cart.totalCost -= cart.items[itemIndex].price;
-      await cart.items.remove({ _id: cart.items[itemIndex]._id });
-    }
-    req.session.cart = cart;
-    //save the cart it only if user is logged in
-    if (req.user) {
-      await cart.save();
-    }
-    //delete cart if qty is 0
-    if (cart.totalQty <= 0) {
-      req.session.cart = null;
-      await Cart.findByIdAndRemove(cart._id);
-    }
-    res.redirect(req.headers.referer);
-  } catch (err) {
-    console.log(err.message);
-    res.redirect("/");
-  }
-},
-}
+};
 
 module.exports = CartController;

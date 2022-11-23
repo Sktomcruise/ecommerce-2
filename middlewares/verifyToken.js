@@ -1,17 +1,19 @@
 const jwt =require('jsonwebtoken')
 
-const api_config = require("../config/api.js");
 
 /* jwt token verify */
 const authenticationVerifier = (req, res, next)=> {
 
     const token = req.cookies.token;
+    const userId = req.session.user_sid;
     if (token) {
-        jwt.verify(token, api_config.api.jwt_secret,(err, user)=>{
+        jwt.verify(token, process.env.JWT_SECRET,(err, user)=>{
             if(err) res.status(401).json("Invalid token");
             req.user = user;
             next()
-        })
+        });
+    } else if(!token && !userId){
+        return res.status(401).json("please login");
     } else {
         return res.status(401).json("You are not authenticated");
     }
@@ -19,9 +21,8 @@ const authenticationVerifier = (req, res, next)=> {
 
 /* check if the current user */
 const accessLevelVerifier = (req, res, next) => {
-
     authenticationVerifier(req,res, ()=>{
-        if(req.user.id === req.body.id || req.user.isAdmin) {
+        if(req.user._id === req.params.id || req.user.isAdmin) {
             next()
         } else {
             res.status(403).json("You are not allowed to perform this task");

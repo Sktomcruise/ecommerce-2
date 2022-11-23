@@ -5,6 +5,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const session=require("express-session");
 var MongoStore = require('connect-mongo');
+const connectDB = require("./config/db");
+
 
 const { auth_route, user_route, product_route, cart_route, order_route,payment_route } = require('./routes');
 
@@ -22,39 +24,47 @@ app.use(express.urlencoded({extended : false}));
 app.use(cookieParser());
 
 
+
+app.use(
+  session({
+    key: "user_sid",
+    secret: "somerandonstuffs",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+              mongoUrl: "mongodb://127.0.0.1:27017/ecommercesite",
+          }),
+    cookie: {
+      expires: 60 * 1000 * 60 * 1,
+    },
+  })
+);
+
+app.use((req, res, next) => {
+  if (req.cookies.user_sid && !req.session.user) {
+    res.clearCookie("user_sid");
+  }
+  next();
+});
+
+
+
+/* connecting to the database */
+connectDB();
+
+
+
+
+
 app.use('/', auth_route);
 app.use('/users', user_route);
 app.use('/products', product_route);
 app.use('/carts', cart_route);
 app.use('/orders', order_route);
 app.use('/pay',payment_route)
-app.use(
-    session({
-      key:"userid",
-      secret: "keyboard cat",
-      resave: false,
-      saveUninitialized: true,
-      store: MongoStore.create({
-        mongoUrl: "mongodb://127.0.0.1:27017/ecommercesite",
-      }),
-      //session expires after 3 hours
-      cookie: { maxAge: 60 * 1000*  60 * 3 },
-    })
-  );
 
-const dbConfig = require('./config/database-config-examples');
+const dbConfig = require('./config/db');
 
-/* connecting to the database */
-mongoose.connect(dbConfig.url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => {
-    console.log("Successfully connected to the database");
-}).catch(err => {
-    console.log('Could not connect to the database. Exiting now...', err);
-    process.exit();
-});
 
 /* listen for requests */
 app.listen(4000, () => {

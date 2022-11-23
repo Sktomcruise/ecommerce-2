@@ -12,7 +12,7 @@ router.get('/add-to-cart/:id',(req,res)=>{
 
 
 router.get('/', isAdminVerifier, CartController.get_carts);
-router.get('/:userId', accessLevelVerifier, CartController.get_cart);
+router.get('/user', accessLevelVerifier, CartController.get_cart);
 router.get('/add-to-cart/:id',(req,res)=>{
     res.render("ordercart")
 

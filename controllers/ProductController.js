@@ -23,10 +23,7 @@ const ProductController = {
             } else {
                 products = await Product.find();
             }
-            res.status(200).json({
-                type: "success",
-                products
-            })
+            res.status(200).redirect("/products",{product:product});
         } catch (err) {
             res.status(500).json({
                 type: "error",

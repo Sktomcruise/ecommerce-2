@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+require('dotenv').config()
+
 
 const api_config = require("../config/api.js");
 
@@ -53,7 +55,7 @@ const AuthController = {
         
      
             res.status(200).cookie("token",token,{httpOnly:true})
-            .render("products");
+            .redirect("/");
         }
     },
     async logout_user(req,res,) {
