@@ -23,16 +23,48 @@ const CartController = {
     /* get user cart */
     async get_cart(req, res) {
         try {
-            const cart = await Cart.find({ userId: req.session.user});
-            if (!cart) {
-                res.status(404).json({
-                    type: "error",
-                    message: "User doesn't exists"
-                })
-            } else {
-                res.status(200).render("cart",{cart: cart})
-            }
-        } catch (err) {
+            // const cart = await Cart.findOne({ userId: req.session.user});
+            // if (!cart) {
+            //     res.status(404).json({
+            //         type: "error",
+            //         message: "User doesn't exists"
+            //     })
+            // }  let cart_user;
+    if (req.user) {
+        cart_user = await Cart.findOne({ user:  req.session.user });
+      }
+      if (req.user && cart_user) {
+        req.session.cart = cart_user;
+        return res.render("shop/shopping-cart", {
+          cart: cart_user,
+          pageName: "Shopping Cart",
+          products: await productsFromCart(cart_user),
+        });
+      }
+            // else {
+            //     res.status(200).json(
+            //         {
+            //             cart: cart,
+            //             pageName: "Shopping Cart",
+            //             products: await productsFromCart(cart),
+            //           }
+            //     )
+            // }
+            if (!req.session.cart) {
+                return res.render("shop/shopping-cart", {
+                  cart: null,
+                  pageName: "Shopping Cart",
+                  products: null,
+                });
+              }
+              // otherwise, load the session's cart
+              return res.render("shop/shopping-cart", {
+                cart: req.session.user,
+                pageName: "Shopping Cart",
+                products: await productsFromCart(req.session.user),
+              });
+        }
+     catch (err) {
             res.status(500).json({
                 type: "error",
                 message: "Something went wrong please try again",
@@ -98,7 +130,7 @@ const CartController = {
                 }
             ]
             });
-            return res.status(201).redirect("/products")                   //render("order",{cart: product});            
+            return res.status(201).redirect("/")                   //render("order",{cart: product});            
           }
         } catch (err) {
           console.log(err);

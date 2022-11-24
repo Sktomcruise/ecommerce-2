@@ -47,13 +47,10 @@ const AuthController = {
             const token = jwt.sign({
                 id: user._id,
                 isAdmin: user.isAdmin}, 
-            api_config.api.jwt_secret,
+           process.env.JWT_SECRET,
             { expiresIn: "1d"}
             );
-
-            const { password, ...data } = user._doc;
-        
-     
+            req.session.user=user;
             res.status(200).cookie("token",token,{httpOnly:true})
             .redirect("/");
         }

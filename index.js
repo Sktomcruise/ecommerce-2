@@ -63,7 +63,6 @@ app.use('/carts', cart_route);
 app.use('/orders', order_route);
 app.use('/pay',payment_route)
 
-const dbConfig = require('./config/db');
 
 
 /* listen for requests */

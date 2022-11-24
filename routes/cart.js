@@ -5,16 +5,12 @@ const { CartController } = require('../controllers');
 const { authenticationVerifier, accessLevelVerifier, isAdminVerifier } = require('../middlewares/verifyToken');
 
 
-router.get('/add-to-cart/:id',(req,res)=>{
-    res.render("ordercart",{productId:productId})
-
-});
 
 
 router.get('/', isAdminVerifier, CartController.get_carts);
-router.get('/user', accessLevelVerifier, CartController.get_cart);
+router.get('/:userid', accessLevelVerifier, CartController.get_cart);
 router.get('/add-to-cart/:id',(req,res)=>{
-    res.render("ordercart")
+    res.render("shop/product")
 
 });
 router.post('/add-to-cart/:id', authenticationVerifier, CartController.create_cart);
