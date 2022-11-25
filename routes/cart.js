@@ -8,7 +8,7 @@ const { authenticationVerifier, accessLevelVerifier, isAdminVerifier } = require
 
 
 router.get('/', isAdminVerifier, CartController.get_carts);
-router.get('/:userid', accessLevelVerifier, CartController.get_cart);
+router.get('/user', accessLevelVerifier, CartController.get_cart);
 router.get('/add-to-cart/:id',(req,res)=>{
     res.render("shop/product")
 
