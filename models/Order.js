@@ -2,18 +2,19 @@ const { cookie } = require('express-validator');
 const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
-    // userId: {
-    //     type:String,
-    //     required:true
+    userId: {
+        type:String,
+        required:true
        
-    //   },
+      },
       username:{
-        type:String
+        type:String,
+        required:true
 
       },
      
-    products: [
-        {
+    // products: [
+    //     {
             productId: {
                 type: String
             },
@@ -24,8 +25,8 @@ const OrderSchema = new mongoose.Schema({
             price:{
                 type:Number,
             },
-        }
-    ],
+    //     }
+    // ],
    
     // amount: {
     //     type: Number,
@@ -40,10 +41,10 @@ const OrderSchema = new mongoose.Schema({
     //     default: 1,
     //     required: true,
     //   },
-    // address:{
-    //     type:String
+    address:{
+        type:String
 
-    // },
+    },
     createdAt: {
         type: Date,
         default: Date.now,

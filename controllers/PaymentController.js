@@ -1,6 +1,8 @@
 // require("dotenv").config();
 const stripe = require('stripe')('sk_test_51M57U7SEHz7Df90b1mXlebZhHP1B79SY2gSjbxOY6pOsDSRZpDeQlTdwYbfFOkeupom5hjEmXaEhe1EQ2baMw7li00Cyv6JlsI');
 const express = require('express');
+const Cart = require('../models/Cart');
+
 const app = express();
 app.use(express.static('public'));
 
@@ -12,15 +14,20 @@ const PaymentController = {
           line_items: [
             {
               // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-            //   price: '{{PRICE_ID}}',
+              price: 'price_1M57g0SEHz7Df90bzoQw1O75',
               quantity: 1,
             },
           ],
           mode: 'payment',
           success_url: `http://localhost:4000/success.html`,
           cancel_url: `http://localhost:4000/cancel.html`,
-        })
+        });
+
+        // Handle form submission.
+
 }};
+
+
 
 module.exports = PaymentController;
 

@@ -41,69 +41,7 @@ const CartController = {
       }
   },
 
-              //.json(cart
-                  // {
-                  //     // cart: cart,
-                  //     // pageName: "Shopping Cart",
-                  //     products: await productsFromCart(cart),
-                  //   }
-          //     )
-          // }
-            //  let cart_user;
-    // if (req.user) {
-    //     cart_user = await Cart.findOne({ user:  req.session.user });
-    //   }
-    //   if (req.user && cart_user) {
-    //     req.session.cart = cart_user;
-    //     return res.render("shop/shopping-cart", {
-    //       cart: cart_user,
-    //       pageName: "Shopping Cart",
-    //       products: await productsFromCart(cart_user),
-    //     });
-      
-          
-            // if (!req.session.cart) {
-            //     return res.render("shop/shopping-cart", {
-            //       cart: null,
-            //       pageName: "Shopping Cart",
-            //       products: null,
-            //     });
-            //   }
-            //   // otherwise, load the session's cart
-            //   return res.render("shop/shopping-cart", {
-            //     cart: req.session.user,
-            //     pageName: "Shopping Cart",
-            //     products: await productsFromCart(req.session.user),
-            //   });
-    
-  //    catch (err) {
-  //           res.status(500).json({
-  //               type: "error",
-  //               message: "Something went wrong please try again",
-  //               err
-  //           })
-  //       }
-    
-  // },
-
-    /* add product to cart */
-    // async create_cart(req, res) {
-    //     const newCart = new Cart(req.body);
-    //     try {
-    //         const savedCart = await newCart.save();
-    //         res.status(201).json({
-    //             type: "success",
-    //             message: "Product added successfully",
-    //             savedCart
-    //         })
-    //     } catch (err) {
-    //         res.status(500).json({
-    //             type: "error",
-    //             message: "Something went wrong please try again",
-    //             err
-    //         })
-    //     }
-    // },
+  
 
     async create_cart (req, res) {
         
@@ -117,6 +55,7 @@ const CartController = {
           if (cart) {
               const product = await Product.findById(productId);
             //cart exists for user
+            //console.log(product.image);
             let itemIndex = cart.products.findIndex(p => p.productId == productId);
           //   console.log(cart.products)
           //   console.log(productId)
@@ -127,14 +66,17 @@ const CartController = {
               productItem.quantity =  1;
               cart.products[itemIndex] = productItem;
             } else {
+               
               //product does not exists in cart, add new item
               cart.products.push({ productId: productId,
                   quantity: 1,
                   price: product.price,
-                  title: product.title 
+                  title: product.title ,
+                  image:product.image,
               });
             }
             cart = await cart.save();
+            // console.log("<<<<<<<<<<<<<",cart.products.image);
           //   return res.status(201).send(cart);
           } else {
           const product = await Product.findById(productId);
@@ -146,7 +88,9 @@ const CartController = {
                   productId: productId,
                   quantity: 1,
                   price: product.price,
-                  title: product.title
+                  title: product.title,
+                  image:product.image,
+                  
               }
           ]
           });

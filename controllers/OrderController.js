@@ -2,6 +2,7 @@ const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const User = require('../models/User');
+const { json } = require('body-parser');
 
 
 const OrderController = {
@@ -91,20 +92,23 @@ const OrderController = {
     async create_order(req, res) {
         // const productId = req.body.cartid;
         // let productId = await Product.findById({productId:productId});
-       
-        
+        const userId = req.session.user;
+        let cart = await Cart.findOne({ userId:userId });
 
+        // let obj=JSON.parse(cart)
+
+// console.log(Cart.quantity);
         const newOrder = new Order({
             // const user = await User.findById(req.body.id);
            
             username : req.body.username,
-            // address:req.body.address,
-         
+            address:req.body.address,
+            userId:req.session.user,
           
             products: [
               { 
-                //   productId: req.body.productid,
-                  quantity: req.body.qty,
+                //    productId:req.cart.productId,
+                quantity:cart.totalQty,
                   price:req.body.price,
                  
                 
@@ -115,8 +119,9 @@ const OrderController = {
           });
         try {
 
+            
             const savedOrder =  newOrder.save({savedOrder:newOrder});
-            res.status(201).render("shop/checkout")
+            res.status(201).redirect("/pay/payment")
         } catch (err) {
             res.status(500).json({
                 type: "error",
@@ -124,6 +129,7 @@ const OrderController = {
                 err
             })
         }
+   
     },
 
     /* update order */
