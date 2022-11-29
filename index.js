@@ -28,6 +28,7 @@ app.use(cookieParser());
 app.use(
   session({
     key: "user_sid",
+    
     secret: "somerandonstuffs",
     resave: false,
     saveUninitialized: false,

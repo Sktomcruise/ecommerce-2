@@ -93,33 +93,32 @@ const OrderController = {
         // const productId = req.body.cartid;
         // let productId = await Product.findById({productId:productId});
         const userId = req.session.user;
-        let cart = await Cart.findOne({ userId:userId });
+        let cart = req.session.cart;
+        console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<",cart);
+        
 
-        // let obj=JSON.parse(cart)
-
-// console.log(Cart.quantity);
         const newOrder = new Order({
             // const user = await User.findById(req.body.id);
            
             username : req.body.username,
             address:req.body.address,
             userId:req.session.user,
+            phoneno:req.body.phoneno,
           
             products: [
               { 
-                //    productId:req.cart.productId,
-                quantity:cart.totalQty,
+                    productId:req.session.cart,
+                // title:req.session.cart,
                   price:req.body.price,
                  
                 
               },
              
           ],
-            // address:req.body.address,
+           
           });
         try {
 
-            
             const savedOrder =  newOrder.save({savedOrder:newOrder});
             res.status(201).redirect("/pay/payment")
         } catch (err) {

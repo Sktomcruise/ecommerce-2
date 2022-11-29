@@ -10,7 +10,7 @@ const { PaymentController } = require('../controllers');
 router.get('/payment',(req,res)=>{
     res.render("shop/checkout")
 
-})
+});
 
 router.post('/payment',PaymentController.create_payment);
 

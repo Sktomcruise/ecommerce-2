@@ -13,20 +13,24 @@ const OrderSchema = new mongoose.Schema({
 
       },
      
-    // products: [
-    //     {
+     
+    products: [
+        {
             productId: {
-                type: String
+                type: String,
+                // required:true
+
             },
-            quantity: {
-                type: Number,
+            // quantity: {
+            //     type: Number,
+            //     required:true
                
-            },
+            // },
             price:{
                 type:Number,
             },
-    //     }
-    // ],
+        }
+    ],
    
     // amount: {
     //     type: Number,
@@ -44,6 +48,9 @@ const OrderSchema = new mongoose.Schema({
     address:{
         type:String
 
+    },
+    phoneno:{
+        type:Number,
     },
     createdAt: {
         type: Date,

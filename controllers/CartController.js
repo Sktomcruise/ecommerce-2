@@ -76,6 +76,7 @@ const CartController = {
               });
             }
             cart = await cart.save();
+            req.session.cart=cart;
             // console.log("<<<<<<<<<<<<<",cart.products.image);
           //   return res.status(201).send(cart);
           } else {
@@ -94,7 +95,8 @@ const CartController = {
               }
           ]
           });
-          
+        //   req.seession.cart=cart;
+          req.session.save();
            //render("order",{cart: product});            
         }
         return res.status(201).redirect("/") 
