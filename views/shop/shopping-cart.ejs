@@ -6,9 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bag Source</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
   <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -49,7 +51,25 @@
                     <a href="/carts/add-to-cart/<%=product._id%>"><i style="font-size:24px" class="fa">&#xf067;</i> </a>
                   </td>      -->
                   <td>
-                    <%= product.quantity%>
+                    <p> 
+                      <input id=demoInput type=number min=1 max=110>
+                      <button onclick="increment()">+</button>
+                      <button onclick="decrement()">-</button>
+                      <script>
+                         function increment() {
+                            document.getElementById('demoInput').stepUp();
+                         }
+                         function decrement() {
+                            document.getElementById('demoInput').stepDown();
+                         }
+                      </script>
+                      <%= product.quantity%>
+                      <a href="#">
+                        <span class="glyphicon glyphicon-minus-sign"></span>
+                      </a>
+                    </p>
+                   
+                   
                   </td>
                   <th>&nbsp;</th>
                   <th>&nbsp;</th>

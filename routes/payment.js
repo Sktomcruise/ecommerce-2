@@ -8,7 +8,7 @@ const { PaymentController } = require('../controllers');
 
 
 router.get('/payment',(req,res)=>{
-    res.render("shop/checkout")
+    res.render("shop/checkout");
 
 });
 
