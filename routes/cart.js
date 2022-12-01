@@ -15,6 +15,6 @@ router.get('/add-to-cart/:id',(req,res)=>{
 });
 router.post('/add-to-cart/:id', authenticationVerifier, CartController.create_cart);
 router.put('/reduce/:id', accessLevelVerifier, CartController.update_cart);
-router.delete('/removeAll/:id', accessLevelVerifier, CartController.delete_cart);
+router.get('/removeAll/:productId', accessLevelVerifier, CartController.delete_cart);
 
 module.exports = router;

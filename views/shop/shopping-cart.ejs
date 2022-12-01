@@ -18,7 +18,8 @@
     <header>
       <a href="/logout">Logout</a>
     </header>
-    
+      
+
     <div class="row mt-4 mb-4">
       <div class="col-md-5 mt-2 mb-2 ml-2 mr-auto text-dark">
           <table>
@@ -36,6 +37,8 @@
             </thead>
             <form action="/orders/" method="POST">
             <tbody>
+              <% if (cart != null && cart.product ) { %>
+                
               <% cart.products.forEach(function(product) { %>
                 <tr>
                  
@@ -50,26 +53,21 @@
                   <!-- <td class="text-center">
                     <a href="/carts/add-to-cart/<%=product._id%>"><i style="font-size:24px" class="fa">&#xf067;</i> </a>
                   </td>      -->
-                  <td>
-                    <p> 
-                      <input id=demoInput type=number min=1 max=110>
-                      <button onclick="increment()">+</button>
-                      <button onclick="decrement()">-</button>
-                      <script>
-                         function increment() {
-                            document.getElementById('demoInput').stepUp();
-                         }
-                         function decrement() {
-                            document.getElementById('demoInput').stepDown();
-                         }
-                      </script>
+                
+                    
+                    <td>
                       <%= product.quantity%>
-                      <a href="#">
-                        <span class="glyphicon glyphicon-minus-sign"></span>
-                      </a>
-                    </p>
-                   
-                   
+                    </td>
+                      
+                    
+                    <td>
+                      <a href="/carts/removeAll/:productId" method="post" value="<%=product.productId%>">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    
+                    </svg>
+                  </a>
                   </td>
                   <th>&nbsp;</th>
                   <th>&nbsp;</th>
@@ -78,6 +76,13 @@
                   </td>
                 </tr>
                 <% }) %>
+                <% }else{%>
+                  <h1>No items in the cart</h1>
+
+                <%} %>
+                
+                
+                
                 <td>
                   <button class="btn btn-block btn-secondary mt-3 mb-3 button-style">
                    order
