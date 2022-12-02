@@ -22,20 +22,20 @@ const CartController = {
 
     /* get user cart */
     async get_cart(req, res) {
-      try {
-          const cart = await Cart.findOne({ userId: req.session.user});
-          
-          
-              res.status(200).render("shop/shopping-cart",{cart: cart})
-          
-      } catch (err) {
-          res.status(500).json({
-              type: "error",
-              message: "Something went wrong please try again",
-              err
-          })
-      }
-  },
+        try {
+            const cart = await Cart.findOne({ userId: req.session.user });
+           // console.log(cart);
+            res.status(200).render("shop/shopping-cart", { cart: cart });
+            // console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<",cart);
+
+        } catch (err) {
+            res.status(500).json({
+                type: "error",
+                message: "Something went wrong please try again",
+                err
+            })
+        }
+    },
 
   
 
@@ -50,26 +50,29 @@ const CartController = {
         
           if (cart) {
               const product = await Product.findById(productId);
-            //cart exists for user
-            //console.log(product.image);
+          
             let itemIndex = cart.products.findIndex(p => p.productId == productId);
-          //   console.log(cart.products)
-          //   console.log(productId)
-          //   console.log(quantity)
+    
             if (itemIndex > -1) {
               //product exists in the cart, update the quantity
               let productItem = cart.products[itemIndex];
               productItem.quantity =  1;
+              cart.products[itemIndex].qty++;
+            //   cart.products[itemIndex].price = cart.items[itemIndex].qty * product.price;
               cart.products[itemIndex] = productItem;
             } else {
-               
+             
               //product does not exists in cart, add new item
               cart.products.push({ productId: productId,
                 quantity: req.body.quantity,
                 price: product.price,
                   title: product.title ,
                   image:product.image,
-              });
+                 // totalPrice: totalPrice +=product.price 
+              },
+              
+              );
+              cart.totalCost += product.price;
               
             }
             cart = await cart.save();
@@ -78,9 +81,16 @@ const CartController = {
           //   return res.status(201).send(cart);
           } else {
           const product = await Product.findById(productId);
+          var totalPrice = 0 ;
+        //    for (var i in cart) {
+        //       totalPrice +=product.price ;
+        //   }
           //no cart for user, create new cart
           const newCart = await Cart.create({
+    //         cellAmount.textContent = amount;
+    // cellPrice.textContent = amount * product.price;
             userId : req.session.user,
+            
             products: [
               { 
                   productId: productId,
@@ -90,7 +100,9 @@ const CartController = {
                   image:product.image,
                   
               }
-          ]
+          ],
+          totalCost: totalPrice +=product.price ,
+         
           });
         //   req.seession.cart=cart;
           req.session.save();
@@ -143,11 +155,15 @@ const CartController = {
     /* delete cart */
     async delete_cart(req, res) {
         try {
-            await Cart.findOneAndDelete(req.params.productId);
-            res.status(200).json({
-                type: "success",
-                message: "Product has been deleted successfully"
-            });
+            await Cart.findOneAndRemove(req.params.productId);
+            // CartController.prototype.deleteCartItem = (req, res, next) => {
+            //     Cart.update({userid : req.params.userId}, { $pull: { products : {productid: req.params.productId }}}, {multi: true})
+            //     };
+            res.redirect(req.get('referer'));
+            // json({
+            //     type: "success",
+            //     message: "Product has been deleted successfully"
+            // });
         } catch (err) {
             res.status(500).json({
                 type: "error",
