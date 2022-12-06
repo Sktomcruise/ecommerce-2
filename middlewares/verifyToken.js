@@ -15,7 +15,8 @@ const authenticationVerifier = (req, res, next)=> {
     } else if(!token && !userId){
         return res.status(401).json("please login");
     } else {
-        return res.status(401).json("You are not authenticated");
+        return res.status(401).render("notauthen")
+        //json("You are not authenticated");
     }
 }
 
@@ -25,7 +26,8 @@ const accessLevelVerifier = (req, res, next) => {
         if(req.user._id === req.params.id || req.user.isAdmin) {
             next()
         } else {
-            res.status(403).json("You are not allowed to perform this task");
+            res.status(403).render("notauthen")
+            //json("You are not allowed to perform this task");
         }
     })
 }
@@ -36,7 +38,8 @@ const isAdminVerifier = (req, res, next) => {
         if(req.user.isAdmin === true) {
             next();
         } else {
-            res.status(403).json("You are not allowed to perform this task")
+            res.status(403).render("notauthen")
+            //json("You are not allowed to perform this task")
         }
     })
 }

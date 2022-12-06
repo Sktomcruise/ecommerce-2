@@ -6,11 +6,23 @@ const CartController = {
     /* get all carts (only admin) */
     async get_carts(req, res) {
         try {
+            
             const carts = await Cart.find();
-            res.status(200).json({
-                type: "success",
-                carts
-            })
+            for(let i in carts){
+                carts[i].userId;
+                           
+            }
+             //console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",carts);
+          return res.status(200).render("shop/admincart",{ carts: carts });
+         
+
+
+            // json({
+            // type: "success",
+            // carts
+      //  })
+        
+              // res.status(200).render("shop/admin-cart",{cart:carts})
         } catch (err) {
             res.status(500).json({
                 type: "error",
