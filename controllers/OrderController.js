@@ -11,10 +11,12 @@ const OrderController = {
     async get_orders(req, res) {
         try {
             const orders = await Order.find();
-            res.status(200).json({
-                type: "success",
-                orders
-            })
+           // console.log(orders);
+            res.status(200).render("admin/adminorder",{orders:orders})
+            // json({
+            //     type: "success",
+            //     orders
+            // })
         } catch (err) {
             res.status(500).json({
                 type: "error",
@@ -67,7 +69,7 @@ const OrderController = {
     /* get user's orders */
     async get_order(req, res) {
         try {
-            const orders = await Order.findOne({ userId: req.params.userId });
+            const orders = await Order.findOne({ userId: req.session.userId });
             if (!orders) {
                 res.status(404).json({
                     type: "error",

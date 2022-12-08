@@ -36,6 +36,7 @@ const AuthController = {
     async login_user(req, res) {
         
         const user = await User.findOne({ username: req.body.username });
+       
 
         if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
             res.status(500).json({
@@ -51,8 +52,11 @@ const AuthController = {
             { expiresIn: "1d"}
             );
             req.session.user=user;
+            console.log("<<<<<<<<<<<<<",user);
             res.status(200).cookie("token",token,{httpOnly:true})
-            .redirect("/");
+            .render("user/profile",{user:user});
+            console.log(user.username);
+
         }
     },
     async logout_user(req,res,) {

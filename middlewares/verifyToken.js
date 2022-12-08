@@ -13,7 +13,8 @@ const authenticationVerifier = (req, res, next)=> {
             next()
         });
     } else if(!token && !userId){
-        return res.status(401).json("please login");
+        return res.status(401).redirect("/login")
+        //json("please login");
     } else {
         return res.status(401).render("notauthen")
         //json("You are not authenticated");

@@ -17,7 +17,7 @@
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-
+<link rel="stylesheet" href="/style.css">
   
 
 </head>
@@ -32,9 +32,11 @@
 
             <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
              <h1>ecommercesite</h1>
+             
             </div>
+           
 
-            <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
+            <div class="col-12 col-md-8 order-2 order-md-6 site-search-icon text-right">
               <div class="site-logo">
                 <ul>
                   <li>
@@ -44,9 +46,51 @@
                       
                     </a>
                   </li>
+                  <% if(user !=null){ %>
+                    
+                    <li>
+                        
+                        <div class="dropdown">
+                            <button onclick="myFunction()" class="dropbtn">Welcome:<%=user.username%></button>
+                            <div id="myDropdown" class="dropdown-content">
+                            
+                              <a href="/logout">Logout</a>
+                              
+                            </div>
+                          </div>
+                          <script>
+                            /* When the user clicks on the button, 
+                            toggle between hiding and showing the dropdown content */
+                            function myFunction() {
+                              document.getElementById("myDropdown").classList.toggle("show");
+                            }
+                            
+                            // Close the dropdown if the user clicks outside of it
+                            window.onclick = function(event) {
+                              if (!event.target.matches('.dropbtn')) {
+                                var dropdowns = document.getElementsByClassName("dropdown-content");
+                                var i;
+                                for (i = 0; i < dropdowns.length; i++) {
+                                  var openDropdown = dropdowns[i];
+                                  if (openDropdown.classList.contains('show')) {
+                                    openDropdown.classList.remove('show');
+                                  }
+                                }
+                              }
+                            }
+                            </script>
+                          
+                      </li>
+                  
+                  <!-- <a href="/logout">signout</a> -->
+                 <% } else{ %>
                   <a href="/register">signup</a>
                   <a href="/login">signin</a>
                   <a href="/logout">LOGOUT</a>
+
+                   <%
+                } %>
+                  
                   <!-- <a href="/logout">signout</a> -->
 
                   

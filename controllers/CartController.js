@@ -10,10 +10,10 @@ const CartController = {
             const carts = await Cart.find();
             for(let i in carts){
                 carts[i].userId;
-                           
+                 // console.log( carts[i].products);         
             }
-             //console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",carts);
-          return res.status(200).render("shop/admincart",{ carts: carts });
+             console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",carts);
+          return res.status(200).render("admin/admincart",{ carts: carts });
          
 
 
@@ -120,7 +120,7 @@ const CartController = {
           req.session.save();
            //render("order",{cart: product});            
         }
-        return res.status(201).redirect("/") 
+        return res.status(201).redirect(req.headers.referer) 
       } catch (err) {
         console.log(err);
         res.status(500).send("Something went wrong");

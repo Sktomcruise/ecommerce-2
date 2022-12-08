@@ -21,12 +21,19 @@
             <thead>
                 <tr >
                    
-                  <th scope="col">userId</th>
+                  <th >userId</th>
                  
 
                   <th>TotalCost</th>
-                
-                  <th>Products</th>
+                  <th>ProductID</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                 
+
+
+                  <th>Title</th>
+
+                  <th>Image</th>
                   
                  
                   
@@ -39,6 +46,7 @@
              
              
             <% carts.forEach(function(carts) { %>
+              
                 <!-- for(let i in carts){
                     carts[i].userId;
                                  console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<",carts[i].userId);
@@ -52,17 +60,41 @@
                     
                   
                 </td>
+
               
             <td>
                 <strong><%= carts.totalCost%></strong>
 
 
             </td>
-            <td>
+            <% carts.products.forEach(function(products) { %>
+              <td>
+
+                <strong><%= products.productId%></strong>
+
+            </td>   <td>
+
+              <strong><%= products.quantity%></strong>
+
+          </td>   <td>
+
+            <strong><%= products.price%></strong>
+
+        </td>
+        <td>
+
+          <strong><%= products.title%></strong>
+
+      </td>
+              <td>
+              <img src="<%=products.image%>" class="img-small image-fluid" alt="image thumbnail" height="5%" />
+            </td>
+            <% }) %>
+            <!-- <td>
 
                 <strong><%= carts.products%></strong>
 
-            </td>
+            </td> -->
             </tr>
   
           

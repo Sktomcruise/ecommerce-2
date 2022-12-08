@@ -6,10 +6,12 @@ const UserController = {
     async get_users(req, res) {
         try {
             const users = await User.find();
-            res.status(200).json({
-                type: "success",
-                users
-            });
+            //console.log("11111111111111111111111111111111111111111111111111",users);
+            res.status(200).render("admin/adminuser",{users:users})
+            // json({
+            //     type: "success",
+            //     users
+            // });
         } catch (err) {
             res.status(500).json({
                 type: "error",
