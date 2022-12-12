@@ -1,11 +1,16 @@
 const express = require('express');
 const session = require("express-session")
+const Cart = require('../models/Cart');
+
 const router = express.Router();
 
 const { AuthController } = require('../controllers');
 
-router.get("/",(req,res)=>{
-    res.render("index");
+router.get("/",async(req,res)=>{
+    const userId = req.session.user;
+    let cart = await Cart.findOne({ userId:userId });
+    req.session.cart=cart;
+    res.render("index",{product:null,cart});
 });
 
 router.get("/login",(req,res)=>{
@@ -19,7 +24,7 @@ router.get("/register",(req,res)=>{
 });
 
 router.get("/logout",(req,res)=>{
-    res.render("index")
+    res.render("index",{product:null})
 })
 
 router.post('/register', AuthController.create_user);

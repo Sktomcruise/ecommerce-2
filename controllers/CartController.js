@@ -68,7 +68,7 @@ const CartController = {
             if (itemIndex > -1) {
               //product exists in the cart, update the quantity
               let productItem = cart.products[itemIndex];
-              productItem.quantity =  1;
+              productItem.quantity =  req.body.quantity;
               cart.products[itemIndex].qty++;
             //   cart.products[itemIndex].price = cart.items[itemIndex].qty * product.price;
               cart.products[itemIndex] = productItem;
@@ -77,14 +77,14 @@ const CartController = {
               //product does not exists in cart, add new item
               cart.products.push({ productId: productId,
                 quantity: req.body.quantity,
-                price: product.price,
+                price:quantity* product.price,
                   title: product.title ,
                   image:product.image,
                  // totalPrice: totalPrice +=product.price 
               },
               
               );
-              cart.totalCost += product.price;
+              cart.totalCost +=quantity* product.price;
               
             }
             cart = await cart.save();
@@ -107,13 +107,13 @@ const CartController = {
               { 
                   productId: productId,
                   quantity: req.body.quantity,
-                  price: product.price,
+                  price: quantity*product.price,
                   title: product.title,
                   image:product.image,
                   
               }
           ],
-          totalCost: totalPrice +=product.price ,
+          totalCost: totalPrice +=quantity*product.price ,
          
           });
         //   req.seession.cart=cart;

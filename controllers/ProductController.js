@@ -55,6 +55,26 @@ const ProductController = {
             })
         }
     },
+    async search_product(req,res){
+        let product= await Product.find({
+            "$or":[
+                {
+                    title:{$regex:req.query.key}
+                },
+                {
+                    description:{$regex:req.query.key}
+                },
+                {
+                    categories:{ $regex:req.query.key}, 
+                   
+                },
+             
+                
+            ]
+        })      .sort("-createdAt")
+        ;
+res.render("index",{product:product})
+    },
 
     /* create new product */
     async create_product(req, res) {
